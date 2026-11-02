@@ -66,11 +66,11 @@ POLICY
     username=vault_admin \
     password=lab-only-vault-db-admin \
     password_authentication=scram-sha-256 \
-    allowed_roles=lab-readonly,lab-readwrite,demo-rotation
+    allowed_roles=app_readonly,lab-readwrite,demo-rotation
 
-  vault write database/roles/lab-readonly \
+  vault write database/roles/app_readonly \
     db_name=lab-postgres \
-    creation_statements='CREATE ROLE "{{name}}" WITH LOGIN PASSWORD '\''{{password}}'\'' VALID UNTIL '\''{{expiration}}'\''; GRANT app_readonly TO "{{name}}";' \
+    creation_statements='CREATE ROLE "{{name}}" WITH LOGIN PASSWORD '\''{{password}}'\'' VALID UNTIL '\''{{expiration}}'\''; GRANT app_readonly_privileges TO "{{name}}";' \
     revocation_statements='DROP ROLE IF EXISTS "{{name}}";' \
     default_ttl=1h \
     max_ttl=1h

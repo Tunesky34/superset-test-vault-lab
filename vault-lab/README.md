@@ -32,10 +32,12 @@ secrets directory. Do not copy them into tickets or logs.
 * Nomad 1.10 workload identity with audience `vault.io` is exchanged through
   Vault's `jwt-nomad` auth mount. The Vault role is bound to the exact default
   namespace and demo job ID. No Vault token is put in the job specification.
-* Vault's PostgreSQL database engine provisions distinct `lab-readonly` and
-  `lab-readwrite` roles with 1-hour default and maximum TTLs. The database
-  management user has `CREATEROLE` and membership-admin rights only for the
-  two predeclared privilege roles.
+* Vault's PostgreSQL database engine provisions distinct `app_readonly` and
+  `lab-readwrite` dynamic roles with 1-hour default and maximum TTLs. Each
+  `app_readonly` lease creates a unique PostgreSQL login that inherits
+  `app_readonly_privileges`, a separate `NOLOGIN` role with SELECT-only grants.
+  The database management user has `CREATEROLE` and membership-admin rights
+  only for the predeclared privilege roles.
 * A third `demo-rotation` role uses a 2-minute TTL to make rotation testable
   without waiting an hour. It has read-write database grants and is limited to
   this demo job by Vault policy. Do not use this abbreviated TTL for production.
